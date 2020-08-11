@@ -25,15 +25,21 @@ app.get('/', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-    database.users.push({
-        id: 124,
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        entries: 0,
-        joined: new Date()
-    });
-    res.json("new user");
+    const { name, email, password } = req.body;
+    try {
+        database.users.push({
+            id: 124,
+            name: name,
+            email: email,
+            password: password,
+            entries: 0,
+            joined: new Date()
+        });
+        res.json("new user");
+    } catch (error) {
+        res.json(error);
+    }
+
 });
 
 app.listen(3000);
