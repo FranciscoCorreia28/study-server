@@ -51,4 +51,14 @@ app.post('/signin', (req, res) => {
     }
 });
 
+app.get('/profile/:id', (req, res) => {
+    const { id } = req.params;
+    const dados = database.users.filter(user => user.id === JSON.parse(id));
+    (dados.length == 1)
+        ? res.json(dados)
+        : res.status(400).json("User not found")
+});
+
+
+
 app.listen(3000);
