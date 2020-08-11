@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { json } = require('express');
+
+/* Para fins de testes estou a usar uma constante que simula um banco de dados */
 const database = {
     users: [
         {
@@ -59,6 +61,11 @@ app.get('/profile/:id', (req, res) => {
         : res.status(400).json("User not found")
 });
 
-
+app.put('/image', (req, res) => {
+    const dados = database.users.filter(user => user.id === req.params.id);
+    (dados.length == 1)
+        ? res.status(200).json(++dados[0].entries)
+        : res.json("Error when trying to update the entries");
+});
 
 app.listen(3000);
