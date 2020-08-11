@@ -43,7 +43,8 @@ app.post('/register', (req, res) => {
 });
 
 app.post('/signin', (req, res) => {
-    if (req.body.email === database.users[0].email && req.body.password === database.users[0].password) {
+    const { email, password } = req.body;
+    if (email === database.users[0].email && JSON.parse(password) === database.users[0].password) {
         res.json("logged in with success");
     } else {
         res.json("Error logging in");
