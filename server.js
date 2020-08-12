@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { json } = require('express');
+const cors = require('cors');
+const bcrypt = require('bcrypt-nodejs');
 
 /* Para fins de testes estou a usar uma constante que simula um banco de dados */
 const database = {
@@ -19,7 +21,11 @@ const database = {
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors());
 
+bcrypt.hash('12', null, null, function (err, hash) {
+    console.log(hash)
+});
 /* Apresentando usuários*/
 app.get('/', (req, res) => {
     (database.users)
