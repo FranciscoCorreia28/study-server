@@ -15,6 +15,13 @@ const database = {
             entries: 0,
             joined: new Date() // nota: a data não virá formata.
         }
+    ],
+    login: [
+        {
+            id: 123,
+            email: "francisco@gmail.com",
+            hash: ''
+        }
     ]
 }
 
@@ -23,9 +30,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-bcrypt.hash('12', null, null, function (err, hash) {
-    console.log(hash)
-});
+
 /* Apresentando usuários*/
 app.get('/', (req, res) => {
     (database.users)
@@ -36,6 +41,9 @@ app.get('/', (req, res) => {
 /* Registrando usuários */
 app.post('/register', (req, res) => {
     const { name, email, password } = req.body;
+    bcrypt.hash(password, null, null, function (err, hash) {
+
+    });
     try {
         database.users.push({
             id: 124,
@@ -65,19 +73,23 @@ app.post('/signin', (req, res) => {
 /* buscando o perfil de um usuário pelo id */
 app.get('/profile/:id', (req, res) => {
     const { id } = req.params;
-    const dados = database.users.filter(user => user.id === JSON.parse(id));
-    (dados.length == 1)
-        ? res.json(dados)
-        : res.status(400).json("User not found")
+    const data = database.users
+        .filter(user => user.id === JSON.parse(id));
+    if (data.length > 0) res.status(200).json(data)
+    res.status(400).json("User not found");
 });
-
 /* Atualizando as entradas de um usuário, isso será necessário quando se conectar ao frontend devido a api de inteligência artificial */
 app.put('/image', (req, res) => {
     const { id } = req.body;
-    const dados = database.users.filter(user => user.id === JSON.parse(id));
-    (dados.length == 1)
-        ? res.status(200).json(++dados[0].entries)
-        : res.json("Error when trying to update the entries");
+    database.users.forEach(user => {
+        if (JSON.parse(id) === user.id) {
+            user.entries += 1
+            res.json(user.entries);
+        };
+    });
+    console.log(id)
+    res.status(400).json("Cannot update the entries");
+
 });
 
 app.listen(3000);
